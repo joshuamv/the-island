@@ -4,7 +4,7 @@
 body{
   margin: 0;
   padding: 0;
-  background-color: #090A0D;
+  background-color: #A0BBCB;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -12,6 +12,64 @@ body{
   -ms-user-select: none;
   user-select: none;
   cursor: default;
+  display: flex;
+  flex-direction: column;
 }
 
 /* loading screens */
+
+/* tutorial */
+
+/* gameplay */
+
+.top-bar{
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.title{
+  margin-right: 50px;
+}
+
+.day-button{
+  background-color: white;
+  width: 100px;
+  height: 40px;
+  border-radius: 100px;
+}
+
+.video-wrapper{
+  height: 90vh;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+h3{
+  font-family: sans-serif;
+  font-size: 50px;
+  color: #B8D0DD;
+}
+
+.earthZone{
+  background-color: #F8E7C9;
+  width: 300px;
+  height: 200px;
+}
+
+.waterZone{
+ background-color: #4093A0;
+ width: 300px;
+ height: 400px;
+}
+
+/* gameover */
+
+/* badge won */
