@@ -399,6 +399,10 @@ p{
   align-items: center;
 }
 
+#whatsapp-button:hover{
+  background-color: #0FA94A;
+}
+
 #facebook-button{
   display: none;
   width: auto;
@@ -409,6 +413,10 @@ p{
   align-items: center;
 }
 
+#facebook-button:hover{
+  background-color: #0065B8;
+}
+
 #twitter-button{
   display: none;
   width: auto;
@@ -417,6 +425,10 @@ p{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#twitter-button:hover{
+  background-color: #0D94E7;
 }
 
 #instagram-button{
