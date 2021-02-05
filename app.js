@@ -55,7 +55,17 @@ $(document).ready(function() {
   });
 
   //social buttons
-  // https://api.whatsapp.com/send?text=Check%20out%20The%20Island%20https://joshuamv.github.io/the-island/
+  $( "#whatsapp-button" ).click(function() {
+    window.open("https://api.whatsapp.com/send?text=Nature%20is%20calling,%20check%20out%20The%20Island%20https://joshuamv.github.io/the-island/");
+  });
+
+  $( "#facebook-button" ).click(function() {
+    window.open("https://www.facebook.com/sharer/sharer.php?u=https://joshuamv.github.io/the-island/");
+  });
+
+  $( "#twitter-button" ).click(function() {
+    window.open("http://twitter.com/share?text=Nature is calling, explore The Island?&url=https://joshuamv.github.io/the-island/&hashtags=TheIsland");
+  });
 
   //dev
   setInterval(devUpdateNames, 500);
@@ -135,7 +145,6 @@ function resetGame() {
   $("#whatsapp-button").hide();
   $("#facebook-button").hide();
   $("#twitter-button").hide();
-  $("#instagram-button").hide();
   $("#replay-button").hide();
 }
 
@@ -148,14 +157,13 @@ function gameWon() {
     }, 100);
     $("h2").html("You made it!");
     $("#p1").html("Sunset, Sunrise, Whale and Rainbow. You earned all the badges!");
-    $("#p2").html("Now that you've mastered it, you can share The Island.");
+    $("#p2").html("Now that you've mastered The Island, go ahead and share it with more people. Or just keep exploring it. Don't worry, you won't lose your badges.");
     //hide blue card button
     $("#card-button").hide();
     //show social buttons and reply grey button
     $("#whatsapp-button").show();
     $("#facebook-button").show();
     $("#twitter-button").show();
-    $("#instagram-button").show();
     $("#replay-button").show();
   }, 3000);
 }
