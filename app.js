@@ -55,7 +55,7 @@ $(document).ready(function() {
   });
 
   //social buttons
-  // https://api.whatsapp.com/send?text=Check%20out%20The%20Island
+  // https://api.whatsapp.com/send?text=Check%20out%20The%20Island%20https://joshuamv.github.io/the-island/
 
   //dev
   setInterval(devUpdateNames, 500);
