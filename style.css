@@ -481,3 +481,23 @@ p{
   top: 2%;
   left: 2%;
 }
+
+@media only screen and (max-width: 1200px) {
+  h1{
+    font-size: 140px;
+  }
+
+  .main-title{
+    top: 0%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  h1{
+    font-size: 80px;
+  }
+
+  .main-title{
+    top: 10%;
+  }
+}
