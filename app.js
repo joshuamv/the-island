@@ -27,23 +27,11 @@ let gameStarted;
 let gameoverState = false;
 let gamewonState = false;
 
-//video id files
-// var dayVideo = $("#day-video");
-var crabVideo = $("#crab-video");
-var fishVideo = $("#fish-video");
-var jellyVideoDay = $("#jellyfish-video-day");
-var whaleVideo = $("#whale-video");
-var sunsetVideo = $("#sunset-video");
-var rainbowVideo = $("#rainbow-video");
-
-var nightVideo = $("#night-video");
-var jellyVideoNight = $("#jellyfish-video-night");
-var firefliesVideo = $("#fireflies-video");
-var sunriseVideo = $("#sunrise-video");
-
 //////////////// run when html loads /////////////////
 
 $(document).ready(function() {
+
+  resetGame();
 
   $( "#card-button" ).click(function() {
     startGame();
@@ -61,6 +49,13 @@ $(document).ready(function() {
     waterZoneClicked();
   });
 
+  $( "#replay-button" ).click(function() {
+    resetGame();
+    startGame();
+  });
+
+  //social buttons
+  // https://api.whatsapp.com/send?text=Check%20out%20The%20Island
 
   //dev
   setInterval(devUpdateNames, 500);
@@ -75,14 +70,16 @@ function startGame() {
   //if the game just started
   if (newGame == true) {
     newGame = false;
+    //hide info card
     $(".main-title").css("opacity", "0");
     $(".info-card").css("bottom", "-60%");
     setTimeout(function() {
+      //show day button
       $(".day-button").css("opacity", "1");
       $(".main-title").css("display", "none");
       gameStarted = true;
-    }, 2500);
-    //hide info card so the page can't scroll down to it
+    }, 1300);
+    //do not display info card so the page can't scroll down to it
     setTimeout(function() {
       $(".info-card").css("display", "none");
     }, 500);
@@ -123,6 +120,7 @@ function resetDaytime() {
   $(".button-switch").css("margin-left", "4px");
   //reset background
   $("body").css("background-color", "#ABC4D1");
+  $(".button-switch").css("background-color", "#ABC4D1");
 }
 
 function resetGame() {
@@ -131,6 +129,14 @@ function resetGame() {
   sunset = false;
   rainbow = false;
   whale = false;
+  //show blue card button
+  $("#card-button").show();
+  //hide social buttons and reply grey button
+  $("#whatsapp-button").hide();
+  $("#facebook-button").hide();
+  $("#twitter-button").hide();
+  $("#instagram-button").hide();
+  $("#replay-button").hide();
 }
 
 function gameWon() {
@@ -140,10 +146,17 @@ function gameWon() {
     setTimeout(function() {
       $(".info-card").css("bottom", "0%");
     }, 100);
-    $(".card-button").html("Continue");
     $("h2").html("You made it!");
-    $("#p1").html("Sunset, Sunrise, Whale and Rainbow. You earned all the badges and mastered The Island.");
-    $("#p2").html("You can share your badges with friends and family.");
+    $("#p1").html("Sunset, Sunrise, Whale and Rainbow. You earned all the badges!");
+    $("#p2").html("Now that you've mastered it, you can share The Island.");
+    //hide blue card button
+    $("#card-button").hide();
+    //show social buttons and reply grey button
+    $("#whatsapp-button").show();
+    $("#facebook-button").show();
+    $("#twitter-button").show();
+    $("#instagram-button").show();
+    $("#replay-button").show();
   }, 3000);
 }
 
@@ -486,7 +499,10 @@ function playSunriseVideo() {
   //hide day button
   $(".day-button").css("opacity", "0");
   // play sunrise video
-  fadeVideo($("#night-video"), $("#sunrise-video"));
+  $("#jellyfish-video-night").hide();
+  $("#fireflies-video").hide();
+  $("#sunrise-video").show();
+  $("#sunrise-video").get(0).play();
   //if all badges are earner run gameWon and exit this function
   if (sunrise == true && sunset == true && rainbow == true && whale == true) {
     gameWon();
@@ -498,7 +514,7 @@ function playSunriseVideo() {
     setTimeout(function() {
       $(".info-card").css("bottom", "0%");
     }, 100);
-    $(".card-button").html("Continue");
+    $("#card-button").html("Continue");
     $("h2").html("The Sunrise badge!");
     $("#p1").html("Daytime can only last for so long. You’ve discovered sunrises!");
     $("#p2").html("There's still more to discover whenever you're ready.");
@@ -508,12 +524,15 @@ function playSunriseVideo() {
 function playSunsetVideo() {
   sunset = true;
   displayBadges();
-  $("body").css("background-color", "orange");
+  $("body").css("background-color", "#DF942F");
   //hide day button
   $(".day-button").css("opacity", "0");
   // play sunset video
-  fadeVideo($("#day-video"), $("#sunset-video"));
-  //if all badges are earner run gameWon and exit this function
+  $("#fish-video").hide();
+  $("#crab-video").hide();
+  $("#sunset-video").show();
+  $("#sunset-video").get(0).play();
+  //if all badges are earned run gameWon and exit this function
   if (sunrise == true && sunset == true && rainbow == true && whale == true) {
     gameWon();
     return;
@@ -524,11 +543,11 @@ function playSunsetVideo() {
     setTimeout(function() {
       $(".info-card").css("bottom", "0%");
     }, 100);
-    $(".card-button").html("Continue");
+    $("#card-button").html("Continue");
     $("h2").html("The Sunset badge!");
     $("#p1").html("Daytime can only last for so long. You’ve discovered sunsets!");
     $("#p2").html("There's still more to discover whenever you're ready.");
-  }, 3000);
+  }, 2000);
 }
 
 function playRainbowVideo() {
@@ -537,7 +556,10 @@ function playRainbowVideo() {
   //hide day button
   $(".day-button").css("opacity", "0");
   // play rainbow video
-  fadeVideo($("#day-video"), $("#rainbow-video"));
+  $("#jellyfish-video-day").hide();
+  $("#crab-video").hide();
+  $("#rainbow-video").show();
+  $("#rainbow-video").get(0).play();
   //if all badges are earner run gameWon and exit this function
   if (sunrise == true && sunset == true && rainbow == true && whale == true) {
     gameWon();
@@ -549,7 +571,7 @@ function playRainbowVideo() {
     setTimeout(function() {
       $(".info-card").css("bottom", "0%");
     }, 100);
-    $(".card-button").html("Continue");
+    $("#card-button").html("Continue");
     $("h2").html("The Rainbow badge!");
     $("#p1").html("Amazing what a little water and a little sun can do. Isn’t that one the most colorful badges you’ve ever seen?");
     $("#p2").html("There's still more to discover whenever you're ready.");
@@ -562,7 +584,10 @@ function playWhaleVideo() {
   //hide day button
   $(".day-button").css("opacity", "0");
   // play whale video
-  fadeVideo($("#day-video"), $("#whale-video"));
+  $("#fish-video").hide();
+  $("#jellyfish-video-day").hide();
+  $("#whale-video").show();
+  $("#whale-video").get(0).play();
   //if all badges are earner run gameWon and exit this function
   if (sunrise == true && sunset == true && rainbow == true && whale == true) {
     gameWon();
@@ -574,7 +599,7 @@ function playWhaleVideo() {
     setTimeout(function() {
       $(".info-card").css("bottom", "0%");
     }, 100);
-    $(".card-button").html("Continue");
+    $("#card-button").html("Continue");
     $("h2").html("The Whale badge!");
     $("#p1").html("You’ve earned the badge of the oceans. That’s one of the rare ones!");
     $("#p2").html("There's still more to discover whenever you're ready.");
