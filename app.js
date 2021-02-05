@@ -22,20 +22,32 @@ let waitCursor = false;
 let blackCursor = false;
 
 //game states
-let loadingState = false;
-let tutorialState = false;
-let gameplayState = false;
+let newGame = true;
+let gameStarted;
 let gameoverState = false;
-let badgeState = false;
 let gamewonState = false;
 
-//video files
-var v2 = "videos/test2.mov";
+//video id files
+// var dayVideo = $("#day-video");
+var crabVideo = $("#crab-video");
+var fishVideo = $("#fish-video");
+var jellyVideoDay = $("#jellyfish-video-day");
+var whaleVideo = $("#whale-video");
+var sunsetVideo = $("#sunset-video");
+var rainbowVideo = $("#rainbow-video");
 
+var nightVideo = $("#night-video");
+var jellyVideoNight = $("#jellyfish-video-night");
+var firefliesVideo = $("#fireflies-video");
+var sunriseVideo = $("#sunrise-video");
 
 //////////////// run when html loads /////////////////
 
 $(document).ready(function() {
+
+  $( "#card-button" ).click(function() {
+    startGame();
+  });
 
   $( "#day-button" ).click(function() {
     dayButtonClicked();
@@ -50,11 +62,90 @@ $(document).ready(function() {
   });
 
 
+  //dev
+  setInterval(devUpdateNames, 500);
+
 });
 
 //////////////// functions /////////////////
 
 //click functions
+
+function startGame() {
+  //if the game just started
+  if (newGame == true) {
+    newGame = false;
+    $(".main-title").css("opacity", "0");
+    $(".info-card").css("bottom", "-60%");
+    setTimeout(function() {
+      $(".day-button").css("opacity", "1");
+      $(".main-title").css("display", "none");
+      gameStarted = true;
+    }, 2500);
+    //hide info card so the page can't scroll down to it
+    setTimeout(function() {
+      $(".info-card").css("display", "none");
+    }, 500);
+  }
+  //if continuing the game after winning one badge
+  if (newGame == false && gameStarted == true) {
+    $(".info-card").css("bottom", "-60%");
+    $(".day-button").css("opacity", "1");
+    //hide info card so the page can't scroll down to it
+    setTimeout(function() {
+      $(".info-card").css("display", "none");
+    }, 500);
+    //reset video to day and all animal vars
+    resetDaytime();
+  }
+}
+
+function resetDaytime() {
+  //hide all other videos
+  $("#night-video").hide();
+  $("#sunset-video").hide();
+  $("#sunrise-video").hide();
+  $("#rainbow-video").hide();
+  $("#whale-video").hide();
+  $("#crab-video").hide();
+  $("#fish-video").hide();
+  $("#fireflies-video").hide();
+  $("#jellyfish-video-day").hide();
+  $("#jellyfish-video-night").hide();
+  // show day time video
+  $("#day-video").show();
+  night = false;
+  crab = false;
+  fish = false;
+  jellyfish = false;
+  fireflies = false;
+  //reset day button
+  $(".button-switch").css("margin-left", "4px");
+  //reset background
+  $("body").css("background-color", "#ABC4D1");
+}
+
+function resetGame() {
+  resetDaytime();
+  sunrise = false;
+  sunset = false;
+  rainbow = false;
+  whale = false;
+}
+
+function gameWon() {
+  //change card content when last video is done
+  setTimeout(function() {
+    $(".info-card").css("display", "flex");
+    setTimeout(function() {
+      $(".info-card").css("bottom", "0%");
+    }, 100);
+    $(".card-button").html("Continue");
+    $("h2").html("You made it!");
+    $("#p1").html("Sunset, Sunrise, Whale and Rainbow. You earned all the badges and mastered The Island.");
+    $("#p2").html("You can share your badges with friends and family.");
+  }, 3000);
+}
 
 function dayButtonClicked() {
   if (night == false) {
@@ -119,10 +210,11 @@ function waterZoneClicked() {
   }
 }
 
-//swap and play video functions
+// swap and play video functions
 
-function newGameVideo() {
-  //light up the island for the first time
+function fadeVideo(videoIn, videoOut) {
+  videoIn.fadeIn(100, "linear");
+  videoOut.fadeOut(500, "linear");
 }
 
 function gameOverVideo() {
@@ -135,12 +227,16 @@ function dayIn() {
   //island was alone in nighttime
   if (fireflies == false) {
     night = false;
+    //change night button to day
+    $(".button-switch").css("margin-left", "4px");
     playDayInVideo();
     return;
   }
   //island was with fireflies in nighttime
   if (fireflies == true) {
     night = false;
+    //change night button to day
+    $(".button-switch").css("margin-left", "4px");
     playFirefliesOutVideo();
     return;
   }
@@ -149,12 +245,20 @@ function dayIn() {
 function playDayInVideo() {
   //island is alone
   if (jellyfish == false) {
-    alert( "day in alone" );
+    //change background and button to match day
+    $("body").css("background-color", "#ABC4D1");
+    $(".button-switch").css("background-color", "#ABC4D1");
+    $("#day-video").show();
+    $("#night-video").hide();
     return;
   }
   //island with jellyfish
   if (jellyfish == true) {
-    alert( "day in with jelly" );
+    //change background and button to match day
+    $("body").css("background-color", "#ABC4D1");
+    $(".button-switch").css("background-color", "#ABC4D1");
+    $("#jellyfish-video-day").show();
+    $("#jellyfish-video-night").hide();
     return;
   }
 }
@@ -163,18 +267,24 @@ function nightIn() {
   //island was alone in daytime
   if (crab == false && fish == false) {
     night = true;
+    //change day button to night
+    $(".button-switch").css("margin-left", "54px");
     playNightInVideo();
     return;
   }
   //island was with crabs in daytime
   if (crab == true) {
     night = true;
+    //change day button to night
+    $(".button-switch").css("margin-left", "54px");
     playCrabOutVideo();
     return;
   }
   //island was with fish in daytime
   if (fish == true) {
     night = true;
+    //change day button to night
+    $(".button-switch").css("margin-left", "54px");
     playFishOutVideo();
     return;
   }
@@ -183,12 +293,20 @@ function nightIn() {
 function playNightInVideo() {
   //island is alone
   if (jellyfish == false) {
-    alert( "night in alone");
+    //change background and button to match night
+    $("body").css("background-color", "#000212");
+    $(".button-switch").css("background-color", "#000212");
+    $("#night-video").show();
+    $("#day-video").hide();
     return;
   }
   //island with jellyfish
   if (jellyfish == true) {
-    alert( "night in with jelly");
+    //change background and button to match night
+    $("body").css("background-color", "#000212");
+    $(".button-switch").css("background-color", "#000212");
+    $("#jellyfish-video-night").show();
+    $("#jellyfish-video-day").hide();
     return;
   }
 }
@@ -197,7 +315,7 @@ function playCrabInVideo() {
   //crab in day
   if (crab == false && fish == false && jellyfish == false) {
     crab = true;
-    alert( "crab in" );
+    fadeVideo($("#crab-video"), $("#day-video"));
     return;
   }
   //crab in with fish --> play sunset
@@ -219,14 +337,17 @@ function playCrabOutVideo() {
   //crab out, day stay
   if (crab == true && night == false) {
     crab = false;
-    alert( "crab out" );
+    fadeVideo($("#day-video"), $("#crab-video"));
     return;
   }
   //crab out, night in
   if (crab == true && night == true) {
     crab = false;
-    alert( "crab out night video" );
-    //play night in video with delay;
+    //change background and button to match night
+    $("body").css("background-color", "#000212");
+    $(".button-switch").css("background-color", "#000212");
+    $("#crab-video").hide();
+    $("#night-video").show();
     return;
   }
   alert("no if ran crab out");
@@ -236,7 +357,7 @@ function playFishInVideo() {
   //fish in day
   if (fish == false && crab == false && jellyfish == false) {
     fish = true;
-    alert( "fish in" );
+    fadeVideo($("#fish-video"), $("#day-video"));
     return;
   }
   //fish in with crab --> play sunset
@@ -258,14 +379,17 @@ function playFishOutVideo() {
   //fish out, day stay
   if (fish == true && night == false) {
     fish = false;
-    alert( "fish out" );
+    fadeVideo($("#day-video"), $("#fish-video"));
     return;
   }
-  //fish out night
+  //fish out night in
   if (fish == true && night == true) {
     fish = false;
-    alert( "fish out night in video" );
-    //play night in video with delay;
+    //change background and button to match night
+    $("body").css("background-color", "#000212");
+    $(".button-switch").css("background-color", "#000212");
+    $("#fish-video").hide();
+    $("#night-video").show();
     return;
   }
   alert("no if ran fish out");
@@ -275,7 +399,7 @@ function playJellyfishInVideo() {
   //jellyfish in, night stay
   if (jellyfish == false && fireflies == false) {
     jellyfish = true;
-    alert( "jellyfish in" );
+    fadeVideo($("#jellyfish-video-night"), $("#night-video"));
     return;
   }
   //jellyfish in night with fireflies --> play sunrise
@@ -291,7 +415,7 @@ function playJellyfishOutVideo() {
   //jellyfish out, night stay
   if (jellyfish == true && night == true) {
     jellyfish = false;
-    alert( "jelly out" );
+    fadeVideo($("#night-video"), $("#jellyfish-video-night"));
     return;
   }
   alert("no if ran, jelly out");
@@ -301,7 +425,7 @@ function playFirefliesInVideo() {
   //fireflies in, night stay
   if (fireflies == false && jellyfish == false) {
     fireflies = true;
-    alert( "fireflies in" );
+    fadeVideo($("#fireflies-video"), $("#night-video"));
     return;
   }
   //fireflies in with jellyfish --> play sunrise
@@ -317,39 +441,202 @@ function playFirefliesOutVideo() {
   //fireflies out, night stay
   if (fireflies == true && night == true) {
     fireflies = false;
-    alert( "fireflies out" );
+    fadeVideo($("#night-video"), $("#fireflies-video"));
     return;
   }
   //fireflies out, day in
   if (fireflies == true && night == false) {
     fireflies = false;
-    alert( "fireflies out, day in video" );
-    //play day in video with delay;
+    $("#fireflies-video").hide();
+    $("#day-video").show();
+    //make background and button daytime colors
+    $("body").css("background-color", "#ABC4D1");
+    $(".button-switch").css("background-color", "#ABC4D1");
     return;
   }
   alert("no if ran fireflies out");
 }
 
+//badges
+
+function displayBadges() {
+  //check which badges to display
+  if (sunrise == true) {
+    $("#sunrise-badge").html('<img src="images/sunrise-badge.png" alt="sunrise-badge" />');
+    $("#sunrise-badge").css("border", "0");
+  }
+  if (sunset == true) {
+    $("#sunset-badge").html('<img src="images/sunset-badge.png" alt="sunset-badge" />');
+    $("#sunset-badge").css("border", "0");
+  }
+  if (rainbow == true) {
+    $("#rainbow-badge").html('<img src="images/rainbow-badge.png" alt="rainbow-badge" />');
+    $("#rainbow-badge").css("border", "0");
+  }
+  if (whale == true) {
+    $("#whale-badge").html('<img src="images/whale-badge.png" alt="whale-badge" />');
+    $("#whale-badge").css("border", "0");
+  }
+}
+
 function playSunriseVideo() {
-  alert( "sunrise" );
-  loadAndPlayVideo(v2);
+  sunrise = true;
+  displayBadges();
+  $("body").css("background-color", "cyan");
+  //hide day button
+  $(".day-button").css("opacity", "0");
+  // play sunrise video
+  fadeVideo($("#night-video"), $("#sunrise-video"));
+  //if all badges are earner run gameWon and exit this function
+  if (sunrise == true && sunset == true && rainbow == true && whale == true) {
+    gameWon();
+    return;
+  }
+  //change card content when sunrise video is done
+  setTimeout(function() {
+    $(".info-card").css("display", "flex");
+    setTimeout(function() {
+      $(".info-card").css("bottom", "0%");
+    }, 100);
+    $(".card-button").html("Continue");
+    $("h2").html("The Sunrise badge!");
+    $("#p1").html("Daytime can only last for so long. You’ve discovered sunrises!");
+    $("#p2").html("There's still more to discover whenever you're ready.");
+  }, 3000);
 }
 
 function playSunsetVideo() {
-  alert( "sunset" );
+  sunset = true;
+  displayBadges();
+  $("body").css("background-color", "orange");
+  //hide day button
+  $(".day-button").css("opacity", "0");
+  // play sunset video
+  fadeVideo($("#day-video"), $("#sunset-video"));
+  //if all badges are earner run gameWon and exit this function
+  if (sunrise == true && sunset == true && rainbow == true && whale == true) {
+    gameWon();
+    return;
+  }
+  //change card content when sunset video is done
+  setTimeout(function() {
+    $(".info-card").css("display", "flex");
+    setTimeout(function() {
+      $(".info-card").css("bottom", "0%");
+    }, 100);
+    $(".card-button").html("Continue");
+    $("h2").html("The Sunset badge!");
+    $("#p1").html("Daytime can only last for so long. You’ve discovered sunsets!");
+    $("#p2").html("There's still more to discover whenever you're ready.");
+  }, 3000);
 }
 
 function playRainbowVideo() {
-  alert( "rainbow" );
+  rainbow = true;
+  displayBadges();
+  //hide day button
+  $(".day-button").css("opacity", "0");
+  // play rainbow video
+  fadeVideo($("#day-video"), $("#rainbow-video"));
+  //if all badges are earner run gameWon and exit this function
+  if (sunrise == true && sunset == true && rainbow == true && whale == true) {
+    gameWon();
+    return;
+  }
+  //change card content when rainbow video is done
+  setTimeout(function() {
+    $(".info-card").css("display", "flex");
+    setTimeout(function() {
+      $(".info-card").css("bottom", "0%");
+    }, 100);
+    $(".card-button").html("Continue");
+    $("h2").html("The Rainbow badge!");
+    $("#p1").html("Amazing what a little water and a little sun can do. Isn’t that one the most colorful badges you’ve ever seen?");
+    $("#p2").html("There's still more to discover whenever you're ready.");
+  }, 3000);
 }
 
 function playWhaleVideo() {
-  alert( "whale" );
+  whale = true;
+  displayBadges();
+  //hide day button
+  $(".day-button").css("opacity", "0");
+  // play whale video
+  fadeVideo($("#day-video"), $("#whale-video"));
+  //if all badges are earner run gameWon and exit this function
+  if (sunrise == true && sunset == true && rainbow == true && whale == true) {
+    gameWon();
+    return;
+  }
+  //change card content when whale video is done
+  setTimeout(function() {
+    $(".info-card").css("display", "flex");
+    setTimeout(function() {
+      $(".info-card").css("bottom", "0%");
+    }, 100);
+    $(".card-button").html("Continue");
+    $("h2").html("The Whale badge!");
+    $("#p1").html("You’ve earned the badge of the oceans. That’s one of the rare ones!");
+    $("#p2").html("There's still more to discover whenever you're ready.");
+  }, 3000);
 }
 
-function loadAndPlayVideo(videoVar) {
-  var video = $("#v1");
-  video.find("source").attr("src", videoVar);
-  video.get(0).load();
-  video.get(0).play();
+//dev
+
+function devUpdateNames() {
+
+  if (crab == true) {
+    $("#crab-dev").css("color", "green");
+  }
+  if (fish == true) {
+    $("#fish-dev").css("color", "green");
+  }
+  if (fireflies == true) {
+    $("#fireflies-dev").css("color", "green");
+  }
+  if (jellyfish == true) {
+    $("#jellyfish-dev").css("color", "green");
+  }
+
+
+  if (crab == false) {
+    $("#crab-dev").css("color", "red");
+  }
+  if (fish == false) {
+    $("#fish-dev").css("color", "red");
+  }
+  if (fireflies == false) {
+    $("#fireflies-dev").css("color", "red");
+  }
+  if (jellyfish == false) {
+    $("#jellyfish-dev").css("color", "red");
+  }
+
+
+  if (sunrise == true) {
+    $("#sunrise-dev").css("color", "green");
+  }
+  if (sunset == true) {
+    $("#sunset-dev").css("color", "green");
+  }
+  if (rainbow == true) {
+    $("#rainbow-dev").css("color", "green");
+  }
+  if (whale == true) {
+    $("#whale-dev").css("color", "green");
+  }
+
+
+  if (sunrise == false) {
+    $("#sunrise-dev").css("color", "red");
+  }
+  if (sunset == false) {
+    $("#sunset-dev").css("color", "red");
+  }
+  if (rainbow == false) {
+    $("#rainbow-dev").css("color", "red");
+  }
+  if (whale == false) {
+    $("#whale-dev").css("color", "red");
+  }
 }
