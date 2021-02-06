@@ -28,7 +28,6 @@ let gameoverState = false;
 let gamewonState = false;
 
 //////////////// run when html loads /////////////////
-
 $(document).ready(function() {
 
   resetGame();
@@ -53,7 +52,6 @@ $(document).ready(function() {
     resetGame();
     startGame();
   });
-
   //social buttons
   $( "#whatsapp-button" ).click(function() {
     window.open("https://api.whatsapp.com/send?text=Nature%20is%20calling,%20check%20out%20The%20Island%20https://joshuamv.github.io/the-island/");
@@ -151,6 +149,8 @@ function resetGame() {
 function gameWon() {
   //change card content when last video is done
   setTimeout(function() {
+    //confetti
+    gameConfetti();
     $(".info-card").css("display", "flex");
     setTimeout(function() {
       $(".info-card").css("bottom", "0%");
@@ -165,7 +165,12 @@ function gameWon() {
     $("#facebook-button").show();
     $("#twitter-button").show();
     $("#replay-button").show();
-  }, 3000);
+  }, 2000);
+}
+
+
+function gameConfetti() {
+  $("body").append("<script>confetti.start(3000, 100);</script>");
 }
 
 function dayButtonClicked() {
@@ -503,7 +508,8 @@ function displayBadges() {
 function playSunriseVideo() {
   sunrise = true;
   displayBadges();
-  $("body").css("background-color", "cyan");
+  $("body").css("background-color", "#D0BDDF");
+  $(".button-switch").css("background-color", "#D0BDDF");
   //hide day button
   $(".day-button").css("opacity", "0");
   // play sunrise video
@@ -526,13 +532,14 @@ function playSunriseVideo() {
     $("h2").html("The Sunrise badge!");
     $("#p1").html("Daytime can only last for so long. You’ve discovered sunrises!");
     $("#p2").html("There's still more to discover whenever you're ready.");
-  }, 3000);
+  }, 2000);
 }
 
 function playSunsetVideo() {
   sunset = true;
   displayBadges();
   $("body").css("background-color", "#DF942F");
+  $(".button-switch").css("background-color", "#DF942F");
   //hide day button
   $(".day-button").css("opacity", "0");
   // play sunset video
